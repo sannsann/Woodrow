@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:defaultValue="1.0"
+        android:entries="@array/pref_text_size_entries"
+        android:entryValues="@array/pref_text_size_values"
+        android:key="textSizeScale"
+        android:summary="@string/appearance_text_size_desc"
+        android:title="@string/appearance_text_size_title" />
+
+</PreferenceScreen>

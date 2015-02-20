@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Woodrow</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    
+    <string name="appearance_text_size_desc">Adjust the appearance of the widget</string>
+    <string name="appearance_text_size_title">Text size</string>
+    <string name="appearance_text_size_very_small">Very small</string>
+    <string name="appearance_text_size_very_large">Very large</string>
+
+    <string name="add_vocab_desc">Add a new vocabulary word</string>
+    
+    <string name="open_prefs_desc">Open the settings of Woodrow</string>
+    
+    <string name="appearance_prefs_desc">Adjust the appearance of Woodrow</string>
+    <string name="appearance_prefs_title">Appearance</string>
+    
+    <string name="no_available_vocabulary">No available vocabulary</string>
+
+</resources>
