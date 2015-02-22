@@ -17,6 +17,10 @@
     <string name="appearance_prefs_desc">Adjust the appearance of Woodrow</string>
     <string name="appearance_prefs_title">Appearance</string>
     
+    <string name="word_entry">Word</string>
+    <string name="date_entry">Date Added</string>
+    <string name="definition_entry">Definition</string>
+    
     <string name="no_available_vocabulary">No available vocabulary</string>
 
 </resources>

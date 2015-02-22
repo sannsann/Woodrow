@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/personDetailScrollView"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/word_entry"
+            android:textColor="#ff707070"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/textWord"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Your lexical addition"
+            android:inputType="text|textAutoComplete"
+            android:textColor="#ff222222"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/date_entry"
+            android:textColor="#ff707070"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/textDateAdded"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:editable="false"
+            android:hint="When were you conscious?"
+            android:inputType="datetime"
+            android:textColor="#ff222222"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/definition_entry"
+            android:textColor="#ff707070"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/textDefinition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="What does it all mean?"
+            android:inputType="textMultiLine|textAutoCorrect"
+            android:textColor="#ff222222"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+</ScrollView>
