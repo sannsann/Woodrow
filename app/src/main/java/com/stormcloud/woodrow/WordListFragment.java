@@ -11,15 +11,18 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
         
 //import com.stormcloud.woodrow.database.DatabaseHandler;
+import com.fortysevendeg.swipelistview.SwipeListView;
+import com.fortysevendeg.swipelistview.SwipeListViewListener;
+import com.stormcloud.woodrow.database.DatabaseHandler;
 import com.stormcloud.woodrow.database.WordProvider;
 import com.stormcloud.woodrow.model.Word;
+import com.stormcloud.woodrow.widget.WoodrowSwipeListViewListener;
 
 /**
  * Created by schhan on 2/20/15.
@@ -31,9 +34,9 @@ public class WordListFragment extends ListFragment
     
     SimpleCursorAdapter mAdapter;
     
-    OnWordClickedListener mWordClickListener;
+    OnWordSelected mWordSelectedListener;
     
-    public interface OnWordClickedListener {
+    public interface OnWordSelected {
         public void onWordSelected(long id);
         
     }
@@ -48,54 +51,36 @@ public class WordListFragment extends ListFragment
         
         // We have a menu item to show in the action bar.
         setHasOptionsMenu(true);
-        
-        // Create an empty adapter we will use to display the loaded data.
-        mAdapter = new SimpleCursorAdapter(getActivity(),
-                R.layout.word_listitem, null, new String[] {
-                Word.COL_WORD, Word.COL_DATEADDED,
-                Word.COL_DEFINITION }, new int[] { R.id.cardWord,
-                R.id.cardDateAdded, R.id.cardDefinition }, 0);
-        
-        setListAdapter(mAdapter);
-        
+
         // Start out with a progress indicator.
 //        setListShown(false);
-        
-        // Prepare the loader. Either reconnect with an existing one or start a new one.
-//        getLoaderManager().initLoader(0, null, this);
-        
+
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        setListAdapter();
-
         // Load the content; Prepare the loader.
         // Either re-connect with an existing one, or start a new one.
         getLoaderManager().initLoader(0, null, this);
         
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(getActivity(),
-                R.layout.word_listitem, null, new String[] {
-                Word.COL_WORD, Word.COL_DATEADDED,
-                Word.COL_DEFINITION }, new int[] { R.id.cardWord,
-                R.id.cardDateAdded, R.id.cardDefinition }, 0);
-        
-        setListAdapter(adapter);
-                
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_word_list, null);
+//        return inflater.inflate(R.layout.fragment_word_list, null);
+        
+        View view = inflater.inflate(R.layout.fragment_word_list, container, false);
+        
+        return view;
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mWordClickListener = (OnWordClickedListener) activity;
+            mWordSelectedListener = (OnWordSelected) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + 
                     " must implement OnWordClickedListener interface");
@@ -104,15 +89,21 @@ public class WordListFragment extends ListFragment
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-//        super.onListItemClick(l, v, position, id);
-        Log.i("WordListFragment", "Item clicked: " + id);
-        
+
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected
-//        mWordClickListener.onWordClicked(getListAdapter().getItemId(position));
+        mWordSelectedListener.onWordSelected(id);
+
+
+        // Let's try deleting items!
+//        DatabaseHandler.getInstance(getActivity()).removeWord(id);
+
     }
 
-    
+
+    /**
+     * Begin LoadManager.LoadCallbacks
+     */
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
@@ -141,13 +132,6 @@ public class WordListFragment extends ListFragment
         
         ListView lv = getListView();
         lv.setAdapter(mAdapter);
-        
-        // This list should now be shown.
-        if (isResumed()) {
-//            setListShown(true);
-        } else {
-//            setListShown(false);
-        }
 
     }
 

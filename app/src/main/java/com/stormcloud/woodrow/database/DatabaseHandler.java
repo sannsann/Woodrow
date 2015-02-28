@@ -1,11 +1,15 @@
 package com.stormcloud.woodrow.database;
 
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.stormcloud.woodrow.model.Word;
+
+import java.util.List;
 
 /**
  * Created by schhan on 2/20/15.
@@ -46,10 +50,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.insert(Word.TABLE_NAME, null, word.getContent());
         
         Word word1 = new Word();
-        word.word = "one";
-        word.definition = "lonliest number";
-        word.dateadded = "02212015";
-        db.insert(Word.TABLE_NAME, null, word.getContent());
+        word1.word = "test";
+        word1.definition = "an example";
+        word1.dateadded = "02212015";
+        db.insert(Word.TABLE_NAME, null, word1.getContent());
 
     }
 
@@ -82,6 +86,34 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         cursor.close();
 
         return item;
+    }
+    
+//    public Word getRandomWord() {
+//        final SQLiteDatabase db = this.getReadableDatabase();
+//
+//        // Build our db query query
+//
+//        // Get the row count of our db
+////        db.query()
+////
+//        final Cursor = db.query(Word.TABLE_NAME,
+//                Word.FIELDS, Word.COL_ID + " IS ?",
+//                new String[]{String.valueOf(id)}, null, null, null, null);
+//
+//    }
+
+    public long getDBRowCount() {
+
+        final SQLiteDatabase db = this.getReadableDatabase();
+        final Cursor cursor = db.query(Word.TABLE_NAME,
+                Word.FIELDS, null,
+                null, null, null, null, null);
+        
+        long count = cursor.getCount();
+        
+        cursor.close();
+
+        return count;
     }
 
     /**
@@ -122,21 +154,34 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
 
         return success;
-
     }
 
 //    public synchronized boolean updateWord(final Word word) {
-//        // TODO
 //        return false;
 //        
 //    }
-
-    public synchronized int removeWord(final Word word) {
-
+//
+//    public synchronized int removeWord(final Word word) {
+//
+//        final SQLiteDatabase db = this.getWritableDatabase();
+//        final int result = db.delete(Word.TABLE_NAME,
+//                Word.COL_ID + " IS ?",
+//                new String[]{Long.toString(word.id)});
+//
+//        // result is the number of rows that were deleted.
+//        // In this case it should never be anything except zero or one.
+//        if (result > 0) {
+//            notifyProviderOnWordChange();
+//        }
+//        return result;
+//
+//    }
+    
+    public synchronized int removeWord(final long id) {
         final SQLiteDatabase db = this.getWritableDatabase();
         final int result = db.delete(Word.TABLE_NAME,
                 Word.COL_ID + " IS ?",
-                new String[]{Long.toString(word.id)});
+                new String[]{Long.toString(id)});
 
         // result is the number of rows that were deleted.
         // In this case it should never be anything except zero or one.
@@ -144,13 +189,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             notifyProviderOnWordChange();
         }
         return result;
-
     }
 
     private void notifyProviderOnWordChange() {
-
         mContext.getContentResolver().notifyChange(
                 WordProvider.URI_WORDS, null, false);
-
     }
+
+
+//    public List<Word> getAllWords() {}
 }

@@ -13,6 +13,8 @@ import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import com.stormcloud.woodrow.model.WordIntentUtil;
+
 import static android.graphics.Color.alpha;
 import static android.graphics.Color.blue;
 import static android.graphics.Color.green;
@@ -28,7 +30,7 @@ import static com.stormcloud.woodrow.prefs.WoodrowPreferences.PREF_HEADER_THEME;
 import static com.stormcloud.woodrow.prefs.WoodrowPreferences.PREF_HEADER_THEME_DEFAULT;
 import static com.stormcloud.woodrow.prefs.WoodrowPreferences.PREF_SHOW_HEADER;
 
-public class WoodrowAppWidgetProvider extends AppWidgetProvider {
+public class WoodrowWidgetProvider extends AppWidgetProvider {
 
 //    public final static String TAG = "WoodrowWidget";
 
@@ -47,14 +49,16 @@ public class WoodrowAppWidgetProvider extends AppWidgetProvider {
 
         for (int widgetId : appWidgetIds) {
 
-//            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
-//            PendingIntent pending = PendingIntent.getActivity(context, 0, intent, 0);
-
             RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.woodrow_widget);
-//            rv.setOnClickPendingIntent(R.id.overflow_menu, pending);
 
-//            configureBackground(context, rv);
+            configureBackground(context, rv);
             configureActionBar(context, rv);
+            configureWordCard(context, widgetId, rv);
+
+//            configureList(context, widgetId, rv);
+//            Intent svcIntent = new Intent(context, WoodrowWidgetService.class);
+//            rv.setRemoteAdapter(R.id.widget_vocab_list, svcIntent);
+            
             appWidgetManager.updateAppWidget(widgetId, rv);
         }
 
@@ -63,41 +67,29 @@ public class WoodrowAppWidgetProvider extends AppWidgetProvider {
     private void configureBackground(Context context, RemoteViews rv) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (prefs.getBoolean(PREF_SHOW_HEADER, true)) {
-            rv.setViewVisibility(com.stormcloud.woodrow.R.id.action_bar, View.VISIBLE);
+            rv.setViewVisibility(R.id.action_bar, View.VISIBLE);
         } else {
-            rv.setViewVisibility(com.stormcloud.woodrow.R.id.action_bar, View.GONE);
+            rv.setViewVisibility(R.id.action_bar, View.GONE);
         }
         int color = prefs.getInt(PREF_BACKGROUND_COLOR, PREF_BACKGROUND_COLOR_DEFAULT);
         int opaqueColor = Color.rgb(red(color), green(color), blue(color));
-        setColorFilter(rv, com.stormcloud.woodrow.R.id.background_image, opaqueColor);
-        setAlpha(rv, com.stormcloud.woodrow.R.id.background_image, alpha(color));
+        setColorFilter(rv, R.id.background_image, opaqueColor);
+        setAlpha(rv, R.id.background_image, alpha(color));
     }
     
     private void configureActionBar(Context context, RemoteViews rv) {
 
-//        rv.setOnClickPendingIntent(R.id.calendar_current_date, createOpenCalendarPendingIntent(context));
-//        String formattedDate = DateUtils.formatDateTime(context, System.currentTimeMillis(),
-//                DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_WEEKDAY);
-//        rv.setTextViewText(R.id.calendar_current_date, formattedDate.toUpperCase(Locale.getDefault()));
-//        setTextColorFromAttr(context, rv, R.id.calendar_current_date, R.attr.header);
-//        setActionIcons(context, rv);
-//        .
-//        .
-//        .
-//        Intent intent = CalendarIntentUtil.createNewEventIntent();
-//        if (isIntentAvailable(context, intent)) {
-//            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent,
-//                    PendingIntent.FLAG_UPDATE_CURRENT);
-//            rv.setOnClickPendingIntent(R.id.add_event, pendingIntent);
-//        } else {
-//            rv.setViewVisibility(R.id.add_event, View.GONE);
-//        }       
-        
         setActionIcons(context, rv);
         Intent startConfigIntent = new Intent(context, WoodrowConfigurationActivity.class);
         PendingIntent menuPendingIntent = PendingIntent.getActivity(context, 0, startConfigIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         rv.setOnClickPendingIntent(R.id.overflow_menu, menuPendingIntent);
+
+        Intent addWordIntent = WordIntentUtil.createWordIntent(context);
+        PendingIntent addWordPendingIntent = PendingIntent.getActivity(context, 0, addWordIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+        rv.setOnClickPendingIntent(R.id.add_vocab, addWordPendingIntent);
+
     }
     
     private void setActionIcons(Context context, RemoteViews rv) {
@@ -110,6 +102,28 @@ public class WoodrowAppWidgetProvider extends AppWidgetProvider {
         }
         setAlpha(rv, R.id.add_vocab, alpha);
         setAlpha(rv, R.id.overflow_menu, alpha);
+        
+    }
+    
+    private void configureList(Context context, int widgetId, RemoteViews rv) {
+        Intent intent = new Intent(context, WoodrowWidgetService.class);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
+//        intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+        intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+        rv.setRemoteAdapter(R.id.widget_vocab_list, intent);
+//        rv.setEmptyView(R.id.widget_vocab_list, R.id.empty_vocab_list);
+//        rv.setPendingIntentTemplate(R.id.widget_vocab_list, create);
+        
+    }
+    
+    private void configureWordCard(Context context, int widgetId, RemoteViews rv){
+
+        Intent intent = new Intent(context, WoodrowWidgetService.class);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
+        
+        rv.setTextViewText(R.id.cardWord, "word");
+        rv.setTextViewText(R.id.cardDateAdded, "a date");
+        rv.setTextViewText(R.id.cardDefinition, "definition");
         
     }
 }

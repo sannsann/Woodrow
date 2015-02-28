@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.stormcloud.woodrow.database.DatabaseHandler;
 import com.stormcloud.woodrow.model.Word;
@@ -55,9 +56,6 @@ public class WordDetailFragment extends Fragment {
             
             mItem = DatabaseHandler.getInstance(getActivity()).getWord(getArguments().getLong(ARG_ITEM_ID));
 
-            Log.i(TAG, "Yes, getArguments() DID contain ARG_ITEM_ID");
-        } else {
-            Log.i(TAG, "No, getArguments() DOESN'T contain ARG_ITEM_ID");
         }
     }
 

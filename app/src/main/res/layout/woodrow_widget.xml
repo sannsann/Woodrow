@@ -47,19 +47,74 @@
 
         <ImageView
             android:id="@+id/background_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/widget_background"
-            tools:ignore="ContentDescription" />
-        
-        <TextView
-            android:id="@+id/empty_vocab_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:padding="@dimen/definition_padding"
-            android:text="@string/no_available_vocabulary"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:src="@drawable/widget_background"
+            tools:ignore="ContentDescription" />
+        <ListView
+            android:id="@+id/widget_vocab_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:dividerHeight="0dp" />
+        <!--<TextView-->
+            <!--android:id="@+id/empty_vocab_list"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:gravity="center"-->
+            <!--android:padding="@dimen/definition_padding"-->
+            <!--android:text="@string/no_available_vocabulary"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium"/>-->
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/cardWord"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:textColor="#ff707070"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/cardDateAdded"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:textColor="#ff707070"
+                android:textSize="11sp"
+                android:layout_below="@id/cardWord"/>
+
+            <TextView
+                android:id="@+id/cardDefinition"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:maxLines="3"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:textColor="#ff8d8d8d"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <!--<View-->
+            <!--android:id="@+id/cardStatus"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:layout_marginTop="4dp"-->
+            <!--android:background="@android:color/holo_blue_light"-->
+            <!--android:visibility="visible" />-->
+
+
+
+
+
     </FrameLayout>
 
 
