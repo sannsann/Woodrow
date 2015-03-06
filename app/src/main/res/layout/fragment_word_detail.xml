@@ -63,6 +63,11 @@
             android:inputType="textMultiLine|textAutoCorrect"
             android:textColor="#ff222222"
             android:textSize="20sp" />
+        <Button
+            android:id="@+id/buttonRetrieveDefinition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Get Definition" />
     </LinearLayout>
 
 </ScrollView>

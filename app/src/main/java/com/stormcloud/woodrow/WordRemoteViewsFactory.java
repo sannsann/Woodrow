@@ -1,9 +1,14 @@
 package com.stormcloud.woodrow;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.support.v4.content.CursorLoader;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService.RemoteViewsFactory;
 
+import com.stormcloud.woodrow.database.DatabaseHandler;
+import com.stormcloud.woodrow.database.WordProvider;
 import com.stormcloud.woodrow.model.IWordVisualizer;
 import com.stormcloud.woodrow.model.VocabWordVisualizer;
 import com.stormcloud.woodrow.model.Word;
@@ -42,13 +47,28 @@ public class WordRemoteViewsFactory implements RemoteViewsFactory {
 //        RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.woodrow_widget);
 //        rv.setPendingIntentTemplate(R.id.widget_vocab_list), ;
 
-        Word firstWord = new Word();
-        firstWord.word = "onus";
-        firstWord.definition = "used to refer to something that is one's duty or obligation";
-        firstWord.dateadded = "02/22/2022";
+//        Cursor cursor = new CursorLoader(getActivity(),
+//                WordProvider.URI_WORDS, Word.FIELDS, null, null,
+//                null);
+
+
+        final SQLiteDatabase db = DatabaseHandler.getInstance(context).getReadableDatabase();
+        final Cursor cursor = db.query(Word.TABLE_NAME,
+                Word.FIELDS, null, null, null,
+                null, null, null);
+
+        while(cursor.moveToNext()) {
+            Word word = new Word(cursor);
+            wordEntries.add(word);
+        }
+//        Word firstWord = new Word();
+//        firstWord.word = "onus";
+//        firstWord.definition = "used to refer to something that is one's duty or obligation";
+//        firstWord.dateadded = "02/22/2022";
 
         // We would probably add all the entries into this list after retrieving from the DB
-        wordEntries.add(firstWord);
+//        wordEntries.add(firstWord);
+        
 
     }
 
@@ -69,11 +89,13 @@ public class WordRemoteViewsFactory implements RemoteViewsFactory {
 //                }
 //            }
 //            RemoteViews
-
+            
+            Word word = wordEntries.get(position);
+        
             RemoteViews card = new RemoteViews(context.getPackageName(), R.layout.word_listitem);
-            card.setTextViewText(R.id.cardWord, "word");
-            card.setTextViewText(R.id.cardDateAdded, "a date");
-            card.setTextViewText(R.id.cardDefinition, "definition");
+            card.setTextViewText(R.id.cardWord, word.word);
+            card.setTextViewText(R.id.cardDateAdded, word.dateadded);
+            card.setTextViewText(R.id.cardDefinition, word.definition);
 //
             return card;
 //        }

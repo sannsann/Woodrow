@@ -43,17 +43,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         
         db.execSQL(Word.CREATE_TABLE);
 
-        Word word = new Word();
-        word.word = "onus";
-        word.definition = "used to refer to something that is one's duty or responsibility";
-        word.dateadded = "02212015";
-        db.insert(Word.TABLE_NAME, null, word.getContent());
-        
-        Word word1 = new Word();
-        word1.word = "test";
-        word1.definition = "an example";
-        word1.dateadded = "02212015";
-        db.insert(Word.TABLE_NAME, null, word1.getContent());
+//        Word word = new Word();
+//        word.word = "onus";
+//        word.definition = "used to refer to something that is one's duty or responsibility";
+//        word.dateadded = "02212015";
+//        db.insert(Word.TABLE_NAME, null, word.getContent());
+//
+//        Word word1 = new Word();
+//        word1.word = "test";
+//        word1.definition = "an example";
+//        word1.dateadded = "02212015";
+//        db.insert(Word.TABLE_NAME, null, word1.getContent());
 
     }
 

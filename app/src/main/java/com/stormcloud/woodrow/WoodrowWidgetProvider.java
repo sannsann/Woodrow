@@ -5,15 +5,23 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import com.stormcloud.woodrow.database.DatabaseHandler;
+import com.stormcloud.woodrow.database.WordProvider;
+import com.stormcloud.woodrow.model.Word;
 import com.stormcloud.woodrow.model.WordIntentUtil;
+
+import java.util.Random;
 
 import static android.graphics.Color.alpha;
 import static android.graphics.Color.blue;
@@ -54,14 +62,9 @@ public class WoodrowWidgetProvider extends AppWidgetProvider {
             configureBackground(context, rv);
             configureActionBar(context, rv);
             configureWordCard(context, widgetId, rv);
-
-//            configureList(context, widgetId, rv);
-//            Intent svcIntent = new Intent(context, WoodrowWidgetService.class);
-//            rv.setRemoteAdapter(R.id.widget_vocab_list, svcIntent);
             
             appWidgetManager.updateAppWidget(widgetId, rv);
         }
-
     }
     
     private void configureBackground(Context context, RemoteViews rv) {
@@ -116,14 +119,43 @@ public class WoodrowWidgetProvider extends AppWidgetProvider {
         
     }
     
-    private void configureWordCard(Context context, int widgetId, RemoteViews rv){
+    private void configureWordCard(Context context, int widgetId, RemoteViews rv) {
 
-        Intent intent = new Intent(context, WoodrowWidgetService.class);
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
+//        Intent intent = new Intent(context, WoodrowWidgetService.class);
+//        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
+//        rv.setRemoteAdapter(R.id.widget_vocab_list, intent);
+
+        long count = DatabaseHandler.getInstance(context).getDBRowCount();
         
-        rv.setTextViewText(R.id.cardWord, "word");
-        rv.setTextViewText(R.id.cardDateAdded, "a date");
-        rv.setTextViewText(R.id.cardDefinition, "definition");
+        int i = (int) count;
+        Random random = new Random();
         
+        long randomWordId = random.nextInt(i) + 1;
+        
+        Word word = DatabaseHandler.getInstance(context).getWord(randomWordId);
+        
+        if(word != null) {
+            rv.setTextViewText(R.id.cardWord, word.word);
+            rv.setTextViewText(R.id.cardDateAdded, word.dateadded);
+            rv.setTextViewText(R.id.cardDefinition, word.definition);
+        } else {
+            rv.setTextViewText(R.id.cardWord, "ID we got: " + randomWordId);
+//            rv.setTextViewText(R.id.cardDateAdded, "Random we got: " + randomWordId);
+        }
+
     }
+    
+    private void configureReceiver(Context context, int widgetId, RemoteViews rv) {
+
+    }
+
+//    @Override
+//    public void onReceive(Context context, Intent intent) {
+//        super.onReceive(context, intent);
+//
+//        if(Intent.ACTION_SCREEN_OFF.equals(intent.getAction())){
+////            configureWordCard(context, 0, rv);
+//            Log.i("WidgetWordProvider", "Screen was off!");
+//        }
+//    }
 }
