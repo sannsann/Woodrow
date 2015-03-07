@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-//import com.stormcloud.woodrow.DictionaryEntry.DictionaryEntry;
 import com.stormcloud.woodrow.DictionaryEntry.DictionaryEntryXmlParser;
 import com.stormcloud.woodrow.DictionaryEntry.DictionaryEntry;
 import com.stormcloud.woodrow.database.DatabaseHandler;
@@ -58,6 +57,9 @@ public class WordDetailFragment extends Fragment {
 
     private Button btnRetrieveDefinition;
 
+    /**
+     * Connection/Internet availability related variables
+     */
 
     public static final String WIFI = "Wi-Fi";
     public static final String ANY = "Any";
@@ -79,6 +81,7 @@ public class WordDetailFragment extends Fragment {
      * (e.g. upon screen orientation changes).
      */
 //    public WordDetailFragment() {}
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -229,7 +232,6 @@ public class WordDetailFragment extends Fragment {
 
 //        else if ((sPref.equals(WIFI)) && (wifiConnected)) {
 //        }
-
 
         }
     }

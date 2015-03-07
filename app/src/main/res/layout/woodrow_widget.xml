@@ -75,18 +75,18 @@
                 android:id="@+id/cardWord"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
-                android:textColor="#ff707070"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:textColor="#fff"
                 android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/cardDateAdded"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
-                android:textColor="#ff707070"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:textColor="#fff"
                 android:textSize="11sp"
                 android:layout_below="@id/cardWord"/>
 
@@ -94,11 +94,11 @@
                 android:id="@+id/cardDefinition"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="8dp"
                 android:maxLines="3"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
-                android:textColor="#ff8d8d8d"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:textColor="#fff"
                 android:textSize="16sp" />
 
         </LinearLayout>

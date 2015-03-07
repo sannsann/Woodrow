@@ -50,7 +50,6 @@ public class DictionaryEntryXmlParser {
         } finally {
             in.close();
         }
-
     }
 
     // Reads the feed. This method does the heavy work.
@@ -97,17 +96,7 @@ public class DictionaryEntryXmlParser {
             } else if (name.equals(ENTRY_PRONUNCIATION)) {
                 pronunciation = readPronunciation(parser);
             } else if (name.equals(ENTRY_DEFINITION)) {
-                // We found the def tag, time to go further in
-//                while (parser.next() != XmlPullParser.END_TAG) {
-//                    name = parser.getName();
-//                    if (name.equals(ENTRY_DEFINITION_TEXT)) {
-                        definition = readDefinition(parser);
-//                    }
-//                }
-
-//                while (parser.next())
-//            } else if (name.equals(ENTRY_DEFINITION)) {
-//                definition = readDefinition(parser);
+                definition = readDefinition(parser);
             }
             else {
                 skip(parser);
@@ -116,12 +105,7 @@ public class DictionaryEntryXmlParser {
 
         return new DictionaryEntry(word, syllables, pronunciation, definition);
 
-
-//        return new WordEntry(word, syllables, pronunciation, definition);
-
     }
-
-
 
     // Processes word tags in the feed
     private String readWord(XmlPullParser parser) throws IOException, XmlPullParserException {
@@ -147,9 +131,9 @@ public class DictionaryEntryXmlParser {
 
     private String readDefinition(XmlPullParser parser) throws IOException, XmlPullParserException {
 
-        String definition = "definition";
+        String definition = "";
 //        parser.require(XmlPullParser.START_TAG, ns, ENTRY_DEFINITION);
-//
+
         while (parser.next() != XmlPullParser.END_TAG) {
 
             if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -159,9 +143,9 @@ public class DictionaryEntryXmlParser {
             String name = parser.getName();
             if (name.equals(ENTRY_DEFINITION_TEXT)) {
 //                parser.require(XmlPullParser.START_TAG, ns, ENTRY_DEFINITION_TEXT);
-                definition = readText(parser);
+                definition += ": " + readText(parser);
 //                parser.require(XmlPullParser.END_TAG, ns, ENTRY_DEFINITION_TEXT);
-                break;
+//                break;
             } else {
                 skip(parser);
             }

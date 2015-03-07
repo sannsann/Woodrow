@@ -48,7 +48,11 @@ public class Word {
     /**
      * No need to do anything, fields are already set to default values above 
      */
-    public Word() {}
+    public Word() {
+        
+        
+        
+    }
 
     /**
      * Convert information from the database into a Word object 
