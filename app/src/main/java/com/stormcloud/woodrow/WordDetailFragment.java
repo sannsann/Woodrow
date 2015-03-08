@@ -15,11 +15,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.stormcloud.woodrow.DictionaryEntry.DictionaryEntryWiktionaryParser;
 import com.stormcloud.woodrow.DictionaryEntry.DictionaryEntryXmlParser;
 import com.stormcloud.woodrow.DictionaryEntry.DictionaryEntry;
 import com.stormcloud.woodrow.database.DatabaseHandler;
 import com.stormcloud.woodrow.model.Word;
 
+import org.apache.commons.io.IOUtils;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.BufferedInputStream;
@@ -76,12 +78,13 @@ public class WordDetailFragment extends Fragment {
     private static final String URL_STEM = "http://www.dictionaryapi.com/api/v1/references/collegiate/xml/";
     private static final String API_KEY = "a151e819-6103-452b-a42a-438e13922ae6";
 
+    private static final String URL_ENTRY_POINT = "http://en.wiktionary.org/w/index.php";
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the fragment
      * (e.g. upon screen orientation changes).
      */
 //    public WordDetailFragment() {}
-    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,8 +131,9 @@ public class WordDetailFragment extends Fragment {
             public void onClick(View v) {
 
                 String word = tvWord.getText().toString();
-                new DownloadXmlTask().execute(word);
+//                new DownloadXmlTask().execute(word);
 
+                new DownloadWiktionaryRawTask().execute(word);
             }
         });
 
@@ -152,6 +156,23 @@ public class WordDetailFragment extends Fragment {
         }
     }
 
+    private class DownloadWiktionaryRawTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            
+            loadWiktionaryRawFromNetwork(params[0]);
+            
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (mEntry != null) {
+                tvDefinition.setText(mEntry.getEntryDefinition());
+            }
+        }
+    }
+
     // Uses AsyncTask to download the XML feed from DictionaryAPI.com
     private class DownloadXmlTask extends AsyncTask<String, Void, String> {
         @Override
@@ -166,7 +187,7 @@ public class WordDetailFragment extends Fragment {
         protected void onPostExecute(String s) {
 
             // TODO Use mEntry and populate with retreieved info from DictionaryAPI.com
-            
+
             if (mEntry != null) {
                 tvDefinition.setText(mEntry.getEntryDefinition());
             }
@@ -175,7 +196,6 @@ public class WordDetailFragment extends Fragment {
 
     public void loadXmlFromNetWork(String word) {
 
-//        if((sPref.equals(ANY)) && (wifiConnected || mobileConnected)) {
         if (wifiConnected || mobileConnected) {
 
             urlString = URL_STEM + word + "?key=" + API_KEY;
@@ -232,6 +252,45 @@ public class WordDetailFragment extends Fragment {
 
 //        else if ((sPref.equals(WIFI)) && (wifiConnected)) {
 //        }
+
+        }
+    }
+
+    public void loadWiktionaryRawFromNetwork(String word) {
+
+        if (wifiConnected || mobileConnected) {
+
+            urlString = URL_ENTRY_POINT + "?title=" + word + "&action=raw";
+            InputStream in = null;
+            try {
+
+                /**
+                 * Start XML parsing. Check if parsing is functioning properly 
+                 */
+
+                URL url = new URL(urlString);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setReadTimeout(10000 /* milliseconds */);
+                urlConnection.setConnectTimeout(15000 /* milliseconds */);
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setDoInput(true);
+                urlConnection.connect();
+
+                in = new BufferedInputStream(urlConnection.getInputStream());
+                
+                String text = IOUtils.toString(in);
+
+                DictionaryEntryWiktionaryParser parser = new DictionaryEntryWiktionaryParser();
+                mEntry = parser.parse(text);
+                
+            } catch (MalformedURLException ex) {
+                Log.e("DictionaryEntry", "Malformed URL: " + ex.toString());
+            } catch (IOException ex) {
+                Log.e("DictionaryEntry", "IOException: " + ex.toString());
+            } 
+//            catch (XmlPullParserException ex) {
+//                Log.e("DictionaryEntry", "XmlPullParserException: " + ex.toString());
+//            }
 
         }
     }
